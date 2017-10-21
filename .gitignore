@@ -1,3 +1,7 @@
+**/.vs/
+**/packages/
+products/
+First commit
 # silly macOS
 .DS_Store
 
