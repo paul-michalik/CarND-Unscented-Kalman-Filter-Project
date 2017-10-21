@@ -77,7 +77,7 @@ UKF::UKF() {
   NIS_radar_ = 0.0;
 
   // the current NIS for laser
-  NIS_laser_ = 0.0;
+  NIS_lidar_ = 0.0;
 }
 
 UKF::~UKF() {}
