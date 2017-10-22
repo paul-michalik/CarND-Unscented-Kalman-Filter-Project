@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <utility>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -32,7 +33,7 @@ public:
   MatrixXd Xsig_pred_;
 
   ///* time when the state is true, in us
-  long long time_us_;
+  long previous_timestamp_;
 
   ///* Process noise standard deviation longitudinal acceleration in m/s^2
   double std_a_;
@@ -107,4 +108,16 @@ public:
   void UpdateRadar(MeasurementPackage meas_package);
 };
 
+namespace ukf {
+    int get_lambda(int n);
+    VectorXd calculate_weights(int lambda_, int n_aug_);
+    MatrixXd generate_sigma_points(int n_x_, MatrixXd const& P_, VectorXd const& x_);
+    MatrixXd augment_sigma_points(int n_aug_, VectorXd const& x_, MatrixXd const& P_, double std_a_, double std_yawdd_);
+    MatrixXd predict_sigma_points(int n_x_, int n_aug_, MatrixXd const& Xsig_aug, double delta_t);
+    std::pair<VectorXd, MatrixXd> predict_mean_and_covariance(
+        int n_aug_,
+        int n_x_,
+        VectorXd const& weights_,
+        MatrixXd const& Xsig_pred_);
+}
 #endif /* UKF_H */
