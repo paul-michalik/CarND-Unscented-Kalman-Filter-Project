@@ -187,6 +187,14 @@ void UKF::Prediction(double delta_t)
     auto Xsig = ukf::generate_sigma_points(n_x_, P_, x_);
 
     auto Xsig_aug = ukf::augment_sigma_points(n_aug_, x_, P_, std_a_, std_yawdd_);
+
+    auto Xsig_pred = ukf::predict_sigma_points(n_x_, n_aug_, Xsig_aug, delta_t);
+
+    auto weights = ukf::calculate_weights(ukf::get_lambda(n_x_), n_aug_);
+
+    auto prediction = ukf::predict_mean_and_covariance(n_aug_, n_x_, weights, Xsig_pred);
+    
+    // assign X_, P_!
 }
 
 /**
