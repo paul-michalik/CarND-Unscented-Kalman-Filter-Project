@@ -66,7 +66,7 @@ public:
   int n_aug_;
 
   ///* Sigma point spreading parameter
-  double lambda_;
+  int lambda_;
 
   ///* Normalized Innovation Squared (NIS) for respective measurements
   double NIS_radar_;
@@ -109,10 +109,9 @@ public:
 };
 
 namespace ukf {
-    int get_lambda(int n);
+    int lambda(int n);
     VectorXd calculate_weights(int lambda_, int n_aug_);
-    MatrixXd generate_sigma_points(int n_x_, MatrixXd const& P_, VectorXd const& x_);
-    MatrixXd augment_sigma_points(int n_aug_, VectorXd const& x_, MatrixXd const& P_, double std_a_, double std_yawdd_);
+    MatrixXd augmented_sigma_points(int n_aug_, int lambda_, VectorXd const& x_, MatrixXd const& P_, double std_a_, double std_yawdd_);
     MatrixXd predict_sigma_points(int n_x_, int n_aug_, MatrixXd const& Xsig_aug, double delta_t);
     std::pair<VectorXd, MatrixXd> predict_mean_and_covariance(
         int n_aug_,
