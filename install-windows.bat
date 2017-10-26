@@ -28,7 +28,7 @@ rem Update and Install packages
 rem ==============================
 call "%VcPkgPath%" update
 call "%VcPkgPath%" install uwebsockets --triplet %VcPkgTriplet%
-call "%VcPkgPath%" install project --triplet %VcPkgTriplet%
+call "%VcPkgPath%" integrate project --triplet %VcPkgTriplet%
 
 rem ==============================
 rem Configure CMake
