@@ -47,12 +47,17 @@ public:
     const int lambda_ = 3 - n_aug_;
 
     ///* Radar measurement dimension
-    const int n_z_radr_ = 3;
+    const int n_z_radar_ = 3;
+
+    ///* Lidar measurement dimension
+    const int n_z_lidar_ = 2;
 
     ///* Weights of sigma points
-    const VectorXd weights_ = ukf::calculate_weights(lambda_, n_aug_);
+    const VectorXd weights_ = calculate_weights(lambda_, n_aug_);
 
-    const MatrixXd R_ = ukf::calculate_radar_measurement_noise(n_z_radr_, std_radr_, std_radphi_, std_radrd_);
+    const MatrixXd R_radar_ = calculate_radar_measurement_noise(n_z_radar_, std_radr_, std_radphi_, std_radrd_);
+
+    const MatrixXd R_lidar_ = calculate_lidar_measurement_noise(n_z_lidar_, std_laspx_, std_laspy_);
 public:
     ///* initially set to false, set to true in first call of ProcessMeasurement
     bool is_initialized_ = false;
@@ -85,10 +90,12 @@ public:
     ///* time when the state is true, in us
     long previous_timestamp_ = 0;
 
-    ///* Normalized Innovation Squared (NIS) for respective measurements
+    ///* Normalized Innovation Squared (NIS) for radar measurements
     double NIS_radar_ = 0.;
 
+    ///* Normalized Innovation Squared (NIS) for lidar measurements
     double NIS_lidar_ = 0.;
+
     /**
      * Constructor
      */
@@ -127,20 +134,14 @@ public:
     void AugmentedSigmaPoints();
     void SigmaPointPrediction(double delta_t);
     void PredictMeanAndCovariance();
-    void PredictRadarMeasurement(VectorXd& z_out, MatrixXd& S_out);
-    void PredictLidarMeasurement();
-    void UpdateState(VectorXd& x_out, MatrixXd& P_out);
+    void PredictRadar(VectorXd& z_pred_out, MatrixXd& Zsig_out, MatrixXd& S_out);
+    void UpdateRadar(VectorXd const& z, VectorXd const & z_pred, MatrixXd const & Zsig, MatrixXd & S);
+    void PredictLidar(VectorXd& z_pred_out, MatrixXd& Zsig_out, MatrixXd& S_out);
+    void UpdateLidar(VectorXd const& z, VectorXd const & z_pred, MatrixXd const & Zsig, MatrixXd & S);
+
+    static VectorXd calculate_weights(int lambda_, int n_aug_);
+    static MatrixXd calculate_radar_measurement_noise(int n_z, double std_radr, double std_radphi, double std_radrd);
+    static MatrixXd calculate_lidar_measurement_noise(int n_z, double std_laspx, double std_laspy);
 };
 
-namespace ukf {
-    int lambda(int n);
-    VectorXd calculate_weights(int lambda_, int n_aug_);
-    MatrixXd augmented_sigma_points(int n_aug_, int lambda_, VectorXd const& x_, MatrixXd const& P_, double std_a_, double std_yawdd_);
-    MatrixXd predict_sigma_points(int n_x_, int n_aug_, MatrixXd const& Xsig_aug, double delta_t);
-    std::pair<VectorXd, MatrixXd> predict_mean_and_covariance(
-        int n_aug_,
-        int n_x_,
-        VectorXd const& weights_,
-        MatrixXd const& Xsig_pred_);
-}
 #endif /* UKF_H */
