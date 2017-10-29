@@ -18,7 +18,7 @@ public:
     const double std_a_ = 0.2;
 
     /// Process noise standard deviation yaw acceleration in rad/s^2
-    const double std_yawdd_ = 0.3;
+    const double std_yawdd_ = 0.2;
 
     /// Laser measurement noise standard deviation position1 in m
     const double std_laspx_ = 0.15;
@@ -42,7 +42,7 @@ public:
     const int n_aug_ = 7;
 
     /// Sigma point spreading parameter
-    const int lambda_ = 3 - n_aug_;
+    const double lambda_ = 3 - n_aug_;
 
     /// Radar measurement dimension
     const int n_z_radar_ = 3;
@@ -129,15 +129,15 @@ public:
      */
     void UpdateRadar(MeasurementPackage meas_package);
 
-    void AugmentedSigmaPoints();
-    void SigmaPointPrediction(double delta_t);
+    void CreateAugmentedSigmaPoints();
+    void PredictAugmentedSigmaPoints(double delta_t);
     void PredictMeanAndCovariance();
     void PredictRadar(VectorXd& z_pred_out, MatrixXd& Zsig_out, MatrixXd& S_out);
     void UpdateRadar(VectorXd const& z, VectorXd const & z_pred, MatrixXd const & Zsig, MatrixXd & S);
     void PredictLidar(VectorXd& z_pred_out, MatrixXd& Zsig_out, MatrixXd& S_out);
     void UpdateLidar(VectorXd const& z, VectorXd const & z_pred, MatrixXd const & Zsig, MatrixXd & S);
 
-    static VectorXd calculate_weights(int lambda_, int n_aug_);
+    static VectorXd calculate_weights(double lambda_, int n_aug_);
     static MatrixXd calculate_radar_measurement_noise(int n_z, double std_radr, double std_radphi, double std_radrd);
     static MatrixXd calculate_lidar_measurement_noise(int n_z, double std_laspx, double std_laspy);
     static double normalize_angle(double angle);

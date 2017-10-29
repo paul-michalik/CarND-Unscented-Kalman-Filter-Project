@@ -33,7 +33,7 @@ UKF::~UKF()
  */
 void UKF::ProcessMeasurement(MeasurementPackage meas_package)
 {
-    std::cout << "enter: " << __FUNCTION__ << std::endl;
+    //std::cout << "enter: " << __FUNCTION__ << std::endl;
     /**
     TODO:
 
@@ -95,7 +95,11 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
         }
     }
 
-    std::cout << "exit: " << __FUNCTION__ << std::endl;
+    std::cout
+        << "x = " << std::endl << x_.transpose() << std::endl
+        << "P = " << std::endl << P_ << std::endl;
+
+    //std::cout << "exit: " << __FUNCTION__ << std::endl;
 }
 
 /**
@@ -105,7 +109,7 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
  */
 void UKF::Prediction(double delta_t)
 {
-    std::cout << "enter: " << __FUNCTION__ << std::endl;
+    //std::cout << "enter: " << __FUNCTION__ << std::endl;
 
     /**
     TODO:
@@ -114,13 +118,17 @@ void UKF::Prediction(double delta_t)
     vector, x_. Predict sigma points, the state, and the state covariance matrix.
     */
 
-    AugmentedSigmaPoints();
-    SigmaPointPrediction(delta_t);
+    CreateAugmentedSigmaPoints();
+    PredictAugmentedSigmaPoints(delta_t);
     PredictMeanAndCovariance();
 
-    std::cout << "x prediction:" << std::endl << x_ << std::endl;
+    //std::cout
+    //    << "x prediction:" << std::endl
+    //    << x_ << std::endl
+    //    << "P prediction:" << std::endl
+    //    << P_ << std::endl;
 
-    std::cout << "exit: " << __FUNCTION__ << std::endl;
+    //std::cout << "exit: " << __FUNCTION__ << std::endl;
 }
 
 /**
@@ -129,7 +137,7 @@ void UKF::Prediction(double delta_t)
  */
 void UKF::UpdateLidar(MeasurementPackage meas_package)
 {
-    std::cout << "enter: " << __FUNCTION__ << std::endl;
+    //std::cout << "enter: " << __FUNCTION__ << std::endl;
 
     /**
     TODO:
@@ -146,7 +154,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
     this->PredictLidar(z_pred, Zsig, S);
     this->UpdateLidar(z, z_pred, Zsig, S);
 
-    std::cout << "exit: " << __FUNCTION__ << std::endl;
+    //std::cout << "exit: " << __FUNCTION__ << std::endl;
 }
 
 /**
@@ -155,7 +163,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
  */
 void UKF::UpdateRadar(MeasurementPackage meas_package)
 {
-    std::cout << "enter: " << __FUNCTION__ << std::endl;
+    //std::cout << "enter: " << __FUNCTION__ << std::endl;
 
     /**
     TODO:
@@ -173,10 +181,10 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
     this->PredictRadar(z_pred, Zsig, S);
     this->UpdateRadar(z, z_pred, Zsig, S);
 
-    std::cout << "exit: " << __FUNCTION__ << std::endl;
+    //std::cout << "exit: " << __FUNCTION__ << std::endl;
 }
 
-void UKF::AugmentedSigmaPoints()
+void UKF::CreateAugmentedSigmaPoints()
 {
     //create augmented mean state
     x_aug_.head(5) = x_;
@@ -200,7 +208,7 @@ void UKF::AugmentedSigmaPoints()
     }
 }
 
-void UKF::SigmaPointPrediction(double delta_t)
+void UKF::PredictAugmentedSigmaPoints(double delta_t)
 {
     //predict sigma points
     for (int i = 0; i < 2 * n_aug_ + 1; i++) {
@@ -430,7 +438,7 @@ void UKF::UpdateLidar(VectorXd const & z, VectorXd const & z_pred, MatrixXd cons
 }
 
 
-VectorXd UKF::calculate_weights(int lambda_, int n_aug_)
+VectorXd UKF::calculate_weights(double lambda_, int n_aug_)
 {
     VectorXd weights{2 * n_aug_ + 1};
     double weight_0 = lambda_ / (lambda_ + n_aug_);
