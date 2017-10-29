@@ -4,7 +4,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <OutDir>$(SolutionDir)..\products\msbuild.windows.$(PlatformShortName).$(PlatformToolset).$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\products\msbuild.windows.$(PlatformShortName).$(PlatformToolset).$(Configuration)\tmp\</IntDir>
+    <IntDir>$(SolutionDir)..\products\msbuild.windows.$(PlatformShortName).$(PlatformToolset).$(Configuration)\tmp\$(ProjectName)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Label="Globals">
     <VcpkgTriplet>$(PlatformShortName)-windows-$(PlatformToolset)</VcpkgTriplet>
@@ -13,8 +14,11 @@
     <ClCompile>
       <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
       <SDLCheck>false</SDLCheck>
-      <ProgramDataBaseFileName>$(TargetDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
+    <Link />
     <Link>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
