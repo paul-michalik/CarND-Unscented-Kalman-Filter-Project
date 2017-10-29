@@ -95,9 +95,9 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
         }
     }
 
-    std::cout
-        << "x = " << std::endl << x_.transpose() << std::endl
-        << "P = " << std::endl << P_ << std::endl;
+    //std::cout
+    //    << "x = " << std::endl << x_.transpose() << std::endl
+    //    << "P = " << std::endl << P_ << std::endl;
 
     //std::cout << "exit: " << __FUNCTION__ << std::endl;
 }
