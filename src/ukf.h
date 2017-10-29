@@ -15,10 +15,10 @@ class UKF {
     /// constants
 public:
     /// Process noise standard deviation longitudinal acceleration in m/s^2
-    const double std_a_ = 0.2;
+    const double std_a_ = 0.6;
 
     /// Process noise standard deviation yaw acceleration in rad/s^2
-    const double std_yawdd_ = 0.2;
+    const double std_yawdd_ = 0.3;
 
     /// Laser measurement noise standard deviation position1 in m
     const double std_laspx_ = 0.15;
